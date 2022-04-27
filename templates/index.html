@@ -1,3 +1,11 @@
-<div>
-    <h1>The site works</h1>
+{% extends "layout.html" %}
+
+{% block main %}
+    <div>
+        <h1>The site works</h1>
+        <p>{{data}}</p>
+        {% for row in data %}
+            <p>Id: {{row[0]}} Username: {{row[1]}} Email: {{row[2]}} Password: {{row[3]}} Admin: {{row[4]}}</p>
+        {% endfor %}
 </div>
+{% endblock %}
