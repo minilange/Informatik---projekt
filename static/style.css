@@ -18,9 +18,15 @@
     text-decoration: none;
 }
 
-#product-container.card {
+#product-container > .card {
+    padding: 1rem;
     margin: 1rem;
     width: calc(31% - 1rem);
+}
+
+.card-img-top {
+    width:100%; /* you can use % */
+    height: auto;
 }
 
 #category-list {
