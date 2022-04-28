@@ -7,7 +7,7 @@
     <h3>Kategorier</h3>
     <ul>
         {% for category in categories %}
-        <li onclick="sortCategory()" class="nav-link px-2 link-secondary">{{ category }}</li>
+        <li onclick="sortCategory()" class="nav-link px-2 link-secondary">{{ category[1] }}</li>
         {% endfor %}
         <!-- <li onclick="sortCategory('test')" class="nav-link px-2 link-secondary">CPU</li> -->
         <!-- <li onclick="sortCategory('test')" class="nav-link px-2 link-secondary">GPU</li> -->

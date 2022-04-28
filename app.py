@@ -23,10 +23,11 @@ Session(app)
 
 @app.route("/")
 def index():
-    data = dbCall("SELECT * FROM products")
-    print(f"table: {data}")
+    products = dbCall("SELECT * FROM products")
+    categories = dbCall("SELECT * FROM categories")
+    # print(f"table: {products}")
     # print(f"session: {session['test']}")    
-    return render_template("index.html", products=data)
+    return render_template("index.html", products=products, categories=categories)
 
 @app.route("/about")
 def about():
