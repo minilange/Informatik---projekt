@@ -7,7 +7,7 @@ li {
     transition: 0.3s;
 }
 
-.card {
+#product-container.card {
     margin: 1rem;
     width: calc(31% - 1rem);
 }
