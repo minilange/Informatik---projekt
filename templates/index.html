@@ -4,18 +4,12 @@
     <h1>Products</h1>
     {% for prod in products %}
     <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="..." alt="BILLEDE">
+        <a href="{{prod[5]}}"><img src="{{prod[5]}}.png" alt="Image from Gyazo" width="150px"/></a>
         <div class="card-body">
-            <h5 class="card-title">Produkt 1</h5>
-            <p class="card-text">Produkt beskrivelser</p>
+            <h5 class="card-title">{{prod[1]}}</h5>
+            <p class="card-text">{{prod[3]}}</p>
             <button href="#" class="btn btn-primary">Læg i kurv 🛒</button>
         </div>
-    </div>
-    <div class="container">
-        <footer class="py-3 my-4">
-            <hr />
-            <p class="text-center text-muted">© 2021 Company, Inc</p>
-        </footer>
     </div>
     {% endfor %}
 {% endblock %}
