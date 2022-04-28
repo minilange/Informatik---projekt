@@ -37,13 +37,7 @@
             </button>
         </div>
     </header>
-
-    {% if session["user_id"] %}
-    <p>Logged in</p>
-    {% else %}
-    <p>Not logged in</p>
-    {% endif %}
-
+    
     <main>
         {% block main %}{% endblock %}
     </main>

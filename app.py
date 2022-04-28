@@ -1,4 +1,5 @@
 
+from pickletools import read_unicodestring1
 import sqlite3 as SQL
 from tokenize import String
 from flask import Flask, redirect, render_template, request, session
@@ -14,12 +15,12 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)    
 
 
-# @app.after_request
-# def after_request(response):
-#     response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-#     response.headers["Expires"] = 0
-#     response.headers["Pragma"] = "no-cache"
-#     return response
+@app.after_request
+def after_request(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+    return response
 
 @app.route("/")
 def index():
@@ -32,6 +33,16 @@ def index():
 @app.route("/about")
 def about():
     return render_template("about.html")
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    print(request.method)
+    if request.method == "POST":
+        print("This is a post request")
+        return redirect("/")
+    else:
+        print("this is a get request")
+        return render_template("login.html")
 
 def dbCall(query):    
     conn = SQL.connect("shop.db", check_same_thread=False)
