@@ -3,11 +3,11 @@
 {% block main %}
 <h1>Products</h1>
 
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-light" id="category-list">
-    <h3>Kategorier</h3>
+<div class="d-flex flex-column flex-shrink-0 p-4 bg-light position-sticky" id="category-list">
+    <h5 style="color: #6d6d6d">Kategorier</h5>
     <ul>
         {% for category in categories %}
-        <li onclick="sortCategory()" class=" nav-link px-2 link-secondary">{{ category[1] }}</li>
+        <li onclick="sortCategory()" class=" nav-link px-2 link-secondary">{{ category[1].upper() }}</li>
         {% endfor %}
         <!-- <li onclick="sortCategory('test')" class="nav-link px-2 link-secondary">CPU</li> -->
         <!-- <li onclick="sortCategory('test')" class="nav-link px-2 link-secondary">GPU</li> -->
@@ -23,10 +23,10 @@
             <h5 class="card-title">{{prod[1]}}</h5>
             <p class="card-text">{{prod[3]}}</p>
             <p class="text-end mt-auto"><b>{{prod[2]}} kr.</b></p>
-            <button onclick="addToBasket()" class="btn btn-success mt-2">Læg i kurv 🛒</button>
+            <button class="btn btn-success mt-2">Læg i kurv 🛒</button>
         </div>
     </div>
     {% endfor %}
-</div>
+</div>  
 
 {% endblock %}

@@ -13,7 +13,7 @@
 
 <body class="container">
     <header
-        class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+        class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between top-0 py-3 mb-4 border-bottom position-sticky">
         <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
             T E C H L O G I C
         </a>
@@ -33,10 +33,19 @@
             <li class="btn btn-outline-primary me-2"><a href="/login">Login</a></li>
             {% endif %}
 
-            <button type="button" class="btn btn-outline-primary" onclick="basket()">Kurv 🛒
+            <button type="button" class="btn btn-outline-primary" id="basket-btn" onclick="basket()">Kurv 🛒
                 
                 <span class="badge" id="basket-badge">4</span>
             </button>
+            <span class="hide basket-popup">
+                Kurven indeholder:
+                <ul>
+                    <li>CPU</li>
+                    <li>GPU</li>
+                    <li>RAM</li>
+                    <li>SSD</li>
+                </ul>
+            </span>
         </div>
     </header>
 
@@ -50,7 +59,7 @@
         {% block main %}{% endblock %}
     </main>
 
-    <div class="container d-flex flex-column min-vh-100">
+    <div class="container d-flex flex-column min-vh-10">
         <footer class="py-3 my-4 mt-auto">
             <hr />
             <p class="text-center text-muted">© 2022 TECHLOGIC A/S</p>

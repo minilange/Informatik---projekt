@@ -1,3 +1,20 @@
+html {
+    font-family: sans-serif;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+    height: 100%;
+}
+
+body {
+    height: auto;
+}
+
+header {
+    background-color: var(--bs-body-bg);;
+    z-index: 1;
+}
+
 .nav > li:hover {
     background-color: #f5f5f5;
     border-radius: 5px;
@@ -33,7 +50,24 @@
     display: block;
     float: left;
     width: 24%;
-    /* margin: 2rem 1rem; */
+    top: 5rem;
+}
+
+#category-list > ul > li {
+    list-style: none;
+    padding: 1rem;
+    margin: 0.4rem;
+    cursor: pointer;
+    transition: 0.15s;
+    width: 100%;
+}
+#category-list > ul {
+    padding: 0;
+}
+#category-list > ul > li:hover {
+    background-color: #f2f2f2;
+    color: black;
+    border-radius: 10px;
 }
 
 #product-container {
@@ -67,4 +101,73 @@
 .fa-linkedin {
     background: #007bb5;
     color: white;
+}
+
+/* Basket hover */
+.hide {
+    display: none;
+}
+
+.basket-popup {
+    /* position: fixed;
+    width: 20%;
+    margin-top: 1rem;
+    z-index: 9999;
+    right: 24vh;
+    background-color: #f3f3f3;
+    border: 1px solid #ccc;
+    display: none; */
+
+    background:#F8F8F8;
+    border: 5px solid #DFDFDF;
+    color: #717171;
+    font-size: 13px;
+    height: 30px;
+    letter-spacing: 1px;
+    line-height: 30px;
+    position: relative;
+    text-align: center;
+    text-transform: uppercase;
+    top: 10px;
+    left: 0px;
+    display:none;
+    padding:0 20px;
+}
+
+.basket-popup:after {
+    content:'';
+    position:absolute;
+    bottom:-10px; 
+    width:10px;
+    height:10px;
+    border-bottom:5px solid #dfdfdf;
+    border-right:5px solid #dfdfdf;
+    background:#f8f8f8;
+    left:50%;
+    margin-left:-10px;
+    -moz-transform:rotate(45deg);
+    -webkit-transform:rotate(45deg);
+    transform:rotate(45deg);
+}
+  
+#basket-btn:hover + .hide {
+    display: block;
+}
+
+/* Scrollbar design */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #f6f6f6;
+    border-radius: 10px;
+    margin: 3px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
 }
