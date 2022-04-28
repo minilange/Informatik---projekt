@@ -7,6 +7,25 @@ li {
     transition: 0.3s;
 }
 
+#product-container.card {
+    margin: 1rem;
+    width: calc(31% - 1rem);
+}
+
+#category-list {
+    display: block;
+    float: left;
+    width: 24%;
+    /* margin: 2rem 1rem; */
+}
+
+#product-container {
+    display: block;
+    float: right;
+    width: calc(74% - 2rem);
+    /* margin: 2rem 1rem; */
+}
+
 #basket-badge {
     background-color: #0d6efd;
     color: white;

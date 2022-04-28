@@ -25,10 +25,14 @@ Session(app)
 def index():
     data = dbCall("SELECT * FROM products")
     print(f"table: {data}")
-    # print(f"session: {session['test']}")
+    # print(f"session: {session['test']}")    
     return render_template("index.html", products=data)
 
-def dbCall(query):
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+def dbCall(query):    
     conn = SQL.connect("shop.db", check_same_thread=False)
     db = conn.cursor()
     data = db.execute(query).fetchall()
