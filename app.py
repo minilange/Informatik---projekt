@@ -29,6 +29,10 @@ def index():
     # print(f"session: {session['test']}")
     return render_template("index.html", data=data)
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
 def dbCall(query):    
     conn = SQL.connect("shop.db", check_same_thread=False)
     db = conn.cursor()
