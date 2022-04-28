@@ -43,6 +43,9 @@ def login():
     else:
         print("this is a get request")
         return render_template("login.html")
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
 
 def dbCall(query):    
     conn = SQL.connect("shop.db", check_same_thread=False)
@@ -90,3 +93,5 @@ def dbCall(query):
 # INSERT INTO products (name, price, description, category, image) VALUES ('Corsair 4000D AIRFLOW TG - Black', 749, 'Miditower, ATX, ingen strømforsyning, front 1 x USB 3.0, 1 x USB 3.1 Type C', 6, 'https://gyazo.com/ffa548f0bfa613e419155c567b8aef69');
 # INSERT INTO products (name, price, description, category, image) VALUES ('DUTZO C320 TG RGB - Black', 299, 'Miditower, ATX, ingen strømforsyning, front med RGB knap, 2 x USB 2.0, 1 x USB 3.0', 6, 'https://gyazo.com/4e4f90f9a09b1be3a9b77cfd4a2740a5');
 # INSERT INTO products (name, price, description, category, image) VALUES ('Cooler Master MasterBox Lite 5 ARGB - Black', 499, 'Miditower, ATX, ingen strømforsyning, front med RGB knap, 2 x USB 3.2 Gen 1 Type A', 6, 'https://gyazo.com/64f0c63ce2829e17d32c116c89afc842');
+# INSERT INTO products (name, price, description, category, image) VALUES ('Seagate BarraCuda 3.5" ST2000DM008', 402, 'Harddisk, 2 TB, intern, 3.5", SATA-600, 7200 rpm, buffer: 256 MB - ST2000DM008', 5, 'https://gyazo.com/09c4f81520f4f0bf4ca79f420e6184c1');
+# INSERT INTO products (name, price, description, category, image) VALUES ('Seagate BarraCuda 3.5" ST4000DM004', 667, 'Harddisk, 4 TB, intern, 3.5", SATA-600, 5400 rpm, buffer: 256 MB - ST4000DM004', 5, 'https://gyazo.com/2d81e2e4a815bdf18d118d9581a741f2');
