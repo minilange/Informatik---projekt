@@ -1,11 +1,21 @@
 {% extends "layout.html" %}
 
 {% block main %}
-    <div>
-        <h1>The site works</h1>
-        <p>{{data}}</p>
-        {% for row in data %}
-            <p>Id: {{row[0]}} Username: {{row[1]}} Email: {{row[2]}} Password: {{row[3]}} Admin: {{row[4]}}</p>
-        {% endfor %}
-</div>
+    <h1>Products</h1>
+    {% for prod in products %}
+    <div class="card" style="width: 18rem;">
+        <img class="card-img-top" src="..." alt="BILLEDE">
+        <div class="card-body">
+            <h5 class="card-title">Produkt 1</h5>
+            <p class="card-text">Produkt beskrivelser</p>
+            <button href="#" class="btn btn-primary">Læg i kurv 🛒</button>
+        </div>
+    </div>
+    <div class="container">
+        <footer class="py-3 my-4">
+            <hr />
+            <p class="text-center text-muted">© 2021 Company, Inc</p>
+        </footer>
+    </div>
+    {% endfor %}
 {% endblock %}
