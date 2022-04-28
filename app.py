@@ -1,7 +1,5 @@
 
-from pickletools import read_unicodestring1
 import sqlite3 as SQL
-from tokenize import String
 from flask import Flask, redirect, render_template, request, session
 from flask_session.__init__ import Session
 # from werkzeug.security import check_password_hash, generate_password_hash
@@ -14,6 +12,9 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)    
 
+conn = SQL.connect("shop.db", check_same_thread=False)
+db = conn.cursor()
+
 
 @app.after_request
 def after_request(response):
@@ -24,34 +25,101 @@ def after_request(response):
 
 @app.route("/")
 def index():
-    products = dbCall("SELECT * FROM products")
-    categories = dbCall("SELECT * FROM categories")
+    products = readDB("SELECT * FROM products")
+    categories = readDB("SELECT * FROM categories")
     # print(f"table: {products}")
     # print(f"session: {session['test']}")    
     return render_template("index.html", products=products, categories=categories)
 
-@app.route("/about")
+@app.route("/about", methods=["GET", "POST"])
 def about():
     return render_template("about.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    print(request.method)
+
+    session.clear()
+
+    if not session["cart"]:
+        session["cart"] = []
+    
     if request.method == "POST":
-        print("This is a post request")
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        if username == "" or password == "":
+            return render_template("login.html", error="Please fill in all fields")
+
+        dbUser = readDB(f"SELECT * FROM users WHERE username = '{username}'")
+
+        if len(dbUser) == 0:
+            return render_template("login.html", error="User does not exist")
+        
+        dbUser = dbUser[0]
+        
+        # CHECK USING A HASING FUNCTION
+        if dbUser[3] != password:
+            return render_template("login.html", error="Incorrect password")
+
+        session["user"] = username
+        session["user_id"] = dbUser[0]
+        
+        if dbUser[4] == 1:
+            session["admin"] = True
+        
         return redirect("/")
     else:
-        print("this is a get request")
         return render_template("login.html")
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirm = request.form.get("confirmation")
+        email = request.form.get("email")
+
+        if username == "" or password == "" or confirm == "" or email == "":
+            return render_template("register.html", error="Please fill in all fields")
+
+        if email.count("@") != 1 and email.count(".") == 0:
+            return render_template("register.html", error="Please enter a valid email")
+
+        if password != confirm:
+            return render_template("register.html", error="Passwords do not match")
+        
+        dbUser = readDB(f"SELECT * FROM users WHERE username = '{username}'")
+
+        if len(dbUser) != 0:
+            return render_template("register.html", error="Username is already taken")
+        
+        db.execute("INSERT INTO users (username, password, email, admin) VALUES (?, ?, ?, 0)", (username, password, email))
+        conn.commit()
+        return redirect("/login")
+    else:
+        print("This is a get request")
+        return render_template("register.html")
+
 @app.route("/contact")
 def contact():
     return render_template("contact.html")
 
-def dbCall(query):    
-    conn = SQL.connect("shop.db", check_same_thread=False)
-    db = conn.cursor()
+@app.route("/addToCart", methods=["GET", "POST"])
+def addToCart():
+    product_id = request.form.get("product_id")
+    
+    if session["cart"] == None:
+        session["cart"] = []
+
+    session["cart"]
+    print(f"cart: {session['cart']}")
+    return redirect("/")
+
+
+def readDB(query):    
     data = db.execute(query).fetchall()
-    print(f"fetch data: {data}")
+    # print(f"fetch data: {data}")
     newData = []
     for row in data:
         tmp = []
@@ -60,9 +128,10 @@ def dbCall(query):
             
         newData.append(tmp)
     conn.commit()
-    db.close()
-    return newData  
+    return newData
 
+if __name__ == "__main__":
+    app.run(debug=True)
 
 # INSERT INTO categories (name) VALUES ('cpu');
 # INSERT INTO categories (name) VALUES ('psu');
