@@ -26,7 +26,7 @@ print("Opened database")
 def index():
     data = dbCall("SELECT * FROM users")
     print(f"table: {data}")
-    # print(f"session: {session['test']}")
+    # print(f"session: {session['test']}")    
     return render_template("index.html", data=data)
 
 def dbCall(query):    

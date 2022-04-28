@@ -1,21 +1,31 @@
 {% extends "layout.html" %}
 
 {% block main %}
-    <h1>Products</h1>
+<h1>Products</h1>
+
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-light" id="category-list">
+    <h3>Kategorier</h3>
+    <ul>
+        {% for category in categories %}
+        <li onclick="sortCategory()" class="nav-link px-2 link-secondary">{{ category }}</li>
+        {% endfor %}
+        <!-- <li onclick="sortCategory('test')" class="nav-link px-2 link-secondary">CPU</li> -->
+        <!-- <li onclick="sortCategory('test')" class="nav-link px-2 link-secondary">GPU</li> -->
+
+    </ul>
+</div>
+
+<div class="d-flex flex-wrap p-3 bg-light" id="product-container">
     {% for prod in products %}
-    <div class="card" style="width: 18rem;">
+    <div class="card">
         <img class="card-img-top" src="..." alt="BILLEDE">
         <div class="card-body">
-            <h5 class="card-title">Produkt 1</h5>
-            <p class="card-text">Produkt beskrivelser</p>
-            <button href="#" class="btn btn-primary">Læg i kurv 🛒</button>
+            <h5 class="card-title">{ prod.name }</h5>
+            <p class="card-text">{ prod.desc }</p>
+            <button onclick="addToBasket()" class="btn btn-primary">Læg i kurv 🛒</button>
         </div>
     </div>
-    <div class="container">
-        <footer class="py-3 my-4">
-            <hr />
-            <p class="text-center text-muted">© 2021 Company, Inc</p>
-        </footer>
-    </div>
     {% endfor %}
+</div>
+
 {% endblock %}
