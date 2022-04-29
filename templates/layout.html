@@ -34,15 +34,23 @@
             {% endif %}
 
             <button type="button" class="btn btn-outline-primary" id="basket-btn" onclick="basket()">Kurv 🛒
-                <span class="badge" id="basket-badge">4</span>
+                <span class="badge" id="basket-badge">
+                    {% if session["cart"] %}
+                    {{session["cart"]|length}}
+                    {% else %}
+                    0
+                    {% endif %}
+                </span>
+                </span>
             </button>
             <span class="hide basket-popup">
                 Kurven indeholder:
-                <ul>
-                    <li>CPU</li>
-                    <li>GPU</li>
-                    <li>RAM</li>
-                    <li>SSD</li>
+                <ul class="list-group list-group-flush">
+                    {% for item in session["cart"] %}
+                    
+                       <li class="list-group-item"><b>{{session["cart"][item]}} x</b> {{item}}</li>
+                    
+                    {% endfor %}
                 </ul>
             </span>
         </div>

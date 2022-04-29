@@ -1,8 +1,10 @@
 
 import sqlite3 as SQL
+from string import punctuation
 from flask import Flask, redirect, render_template, request, session
 from flask_session.__init__ import Session
-# from werkzeug.security import check_password_hash, generate_password_hash
+from string import punctuation, digits, ascii_lowercase as lower, ascii_uppercase as upper
+from werkzeug.security import check_password_hash, generate_password_hash
 
 app = Flask(__name__)
 
@@ -55,8 +57,8 @@ def login():
         dbUser = dbUser[0]
         
         # CHECK USING A HASING FUNCTION
-        if dbUser[3] != password:
-            return render_template("login.html", error="Incorrect password")
+        if not check_password_hash(dbUser[3], password):
+            return render_template("login.html", error="Incorrect username and/or password")
 
         session["user"] = username
         session["user_id"] = dbUser[0]
@@ -67,6 +69,11 @@ def login():
         return redirect("/")
     else:
         return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -85,13 +92,16 @@ def register():
 
         if password != confirm:
             return render_template("register.html", error="Passwords do not match")
-        
+
+        if len(password) < 8 or password.count(punctuation) == 0 or password.count(digits) == 0 or password.count(upper) == 0:
+            return render_template("register.html", error="Password must contain at least 8 characters, 1 uppercase letter and 1 number")
+
         dbUser = readDB(f"SELECT * FROM users WHERE username = '{username}'")
 
         if len(dbUser) != 0:
             return render_template("register.html", error="Username is already taken")
         
-        db.execute("INSERT INTO users (username, password, email, admin) VALUES (?, ?, ?, 0)", (username, password, email))
+        db.execute("INSERT INTO users (username, password, email, admin) VALUES (?, ?, ?, 0)", (username, generate_password_hash(password), email))
         conn.commit()
         return redirect("/login")
     else:
@@ -102,16 +112,33 @@ def register():
 def contact():
     return render_template("contact.html")
 
-# @app.route("/addToCart", methods=["GET", "POST"])
-# def addToCart():
-#     product_id = request.form.get("product_id")
+@app.route("/admin")
+def admin():
+    if not session.get("admin"):
+        return redirect("/")
     
-#     if session["cart"] == None:
-#         session["cart"] = []
+    return render_template("admin.html")
 
-#     session["cart"]
-#     print(f"cart: {session['cart']}")
-#     return redirect("/")
+@app.route("/addToCart", methods=["GET", "POST"])
+def addToCart():
+    product_id = request.form.get("product_id")
+    
+
+    try:
+        if session["cart"].get(product_id) == None:
+            session["cart"][product_id] = 1
+            print(f"Added {product_id} to cart")
+        else:
+            session["cart"][product_id] += 1
+            print(f"Added {product_id} to cart with quantity {session['cart'][product_id]}")
+        
+        print(f"cart: {session['cart']}")
+        return redirect("/")
+    except KeyError:
+        print("session['cart'] is empty")
+        session["cart"] = {}
+        session["cart"][product_id] = 1
+        return redirect("/")
 
 
 def readDB(query):    

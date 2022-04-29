@@ -124,36 +124,37 @@ header {
     border: 1px solid #ccc;
     display: none; */
 
-    background:#F8F8F8;
-    border: 5px solid #DFDFDF;
+    background: #F8F8F8;
+    border: 2px solid #cecece;
     color: #717171;
     font-size: 13px;
-    height: 30px;
     letter-spacing: 1px;
     line-height: 30px;
-    position: relative;
+    position: absolute;
     text-align: center;
     text-transform: uppercase;
-    top: 10px;
-    left: 0px;
-    display:none;
-    padding:0 20px;
+    top: 88%;
+    right: 0px;
+    display: none;
+    padding: 0 20px;
+    animation: growDown 300ms ease-in-out forwards;
+    transform-origin: top center;
 }
 
-.basket-popup:after {
+.basket-popup::before {
     content:'';
     position:absolute;
-    bottom:-10px; 
-    width:10px;
-    height:10px;
-    border-bottom:5px solid #dfdfdf;
-    border-right:5px solid #dfdfdf;
+    top: -7px;
+    width: 10px;
+    height: 10px;
+    border-bottom:2px solid #cecece;
+    border-right:2px solid #cecece;
     background:#f8f8f8;
-    left:50%;
+    right: 20%;
     margin-left:-10px;
-    -moz-transform:rotate(45deg);
-    -webkit-transform:rotate(45deg);
-    transform:rotate(45deg);
+    -moz-transform:rotate(225deg);
+    -webkit-transform:rotate(225deg);
+    transform:rotate(225deg);
 }
   
 #basket-btn:hover + .hide {
@@ -177,3 +178,17 @@ header {
 ::-webkit-scrollbar-thumb:hover {
     background-color: #555;
 }
+
+
+/* Animation keyframes */
+@keyframes growDown {
+    0% {
+      transform: scaleY(0)
+    }
+    80% {
+      transform: scaleY(1.1)
+    }
+    100% {
+      transform: scaleY(1)
+    }
+  }
