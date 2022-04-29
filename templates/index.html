@@ -1,17 +1,27 @@
 {% extends "layout.html" %}
 
 {% block main %}
-<h1>Products</h1>
+<h1>Produkter</h1>
 
 <div class="d-flex flex-column flex-shrink-0 p-4 bg-light position-sticky" id="category-list">
     <h5 style="color: #6d6d6d">Kategorier</h5>
     <ul>
         {% for category in categories %}
-        <li onclick="sortCategory()" class=" nav-link px-2 link-secondary">{{ category[1].upper() }}</li>
+        
+        {% if active_category == category[1] %}
+        <div class="d-flex justify-content-center">
+            <div class="sort-form d-flex h-100">
+                <button class="btn nav-link px-2 link-secondary {{'active-category' if active_category == category[1] }}">{{ category[1].upper() }}</button>
+                <a href="/" class="btn h-100 my-auto" id="reset-btn">X</a>
+            </div>
+        </div>
+        {% else %}
+        <form action="/sortCategories" method="post" class="sort-form">
+            <input type="hidden" id="category_name" name="category_name" value={{ category[1] }}>
+            <button type="submit" class="btn nav-link px-2 link-secondary">{{ category[1].upper() }}</button>
+        </form>
+        {% endif %}
         {% endfor %}
-        <!-- <li onclick="sortCategory('test')" class="nav-link px-2 link-secondary">CPU</li> -->
-        <!-- <li onclick="sortCategory('test')" class="nav-link px-2 link-secondary">GPU</li> -->
-
     </ul>
 </div>
 

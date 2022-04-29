@@ -1,24 +1,30 @@
 {% extends "layout.html" %}
 
 {% block main %}
-    <form action="/register" method="post">
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="username" name="username" placeholder="Username" type="text">
-        </div>
-        <div class="mb-3">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="email" name="email" placeholder="Email" type="text">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" id="password" name="password" placeholder="Password" type="password">
-        </div>
-        <div class="mb-3">
-            <input class="form-control mx-auto w-auto" id="confirmation" name="confirmation" placeholder="Confirm password" type="password">
-        </div>
-        {% if error %}
-            <div class="alert alert-danger">
-                {{ error }}
-            </div>
-        {% endif %}
-        <button class="btn btn-primary" type="submit">Regiser</button>
-    </form>
+<form action="/register" method="post" class="w-25 mx-auto">
+    <div class="mb-3">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-100" id="username" name="username"
+            placeholder="Brugernavn" type="text">
+    </div>
+    <div class="mb-3">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-100" id="email" name="email"
+            placeholder="Email" type="text">
+    </div>
+    <div class="mb-3">
+        <input class="form-control mx-auto w-100" id="password" name="password" placeholder="Adgangskode"
+            type="password">
+    </div>
+    <div class="mb-3">
+        <input class="form-control mx-auto w-100" id="confirmation" name="confirmation" placeholder="Gentag adgangskode"
+            type="password">
+    </div>
+    {% if error %}
+    <div class="alert alert-danger">
+        {{ error }}
+    </div>
+    {% endif %}
+    <div class="d-flex w-100 mt-4">
+        <button class="btn btn-primary mx-auto w-100" type="submit">Registrer</button>
+    </div>
+</form>
 {% endblock %}
