@@ -42,10 +42,6 @@ def sort():
     categories = readDB("SELECT * FROM categories")
     return render_template("index.html", products=products, categories=categories, active_category=category_name)
 
-@app.route("/resetCategories")
-def reset():
-    return redirect("/")
-
 @app.route("/about", methods=["GET", "POST"])
 def about():
     return render_template("about.html")
