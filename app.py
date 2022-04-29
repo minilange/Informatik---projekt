@@ -102,16 +102,21 @@ def register():
 def contact():
     return render_template("contact.html")
 
-# @app.route("/addToCart", methods=["GET", "POST"])
-# def addToCart():
-#     product_id = request.form.get("product_id")
-    
-#     if session["cart"] == None:
-#         session["cart"] = []
+@app.route("/addToCart", methods=["GET", "POST"])
+def addToCart():
+    product_id = request.form.get("product_id")
+    print('prod id: ',  product_id)
+    # if session["cart"] == None:
+    #     session["cart"] = []
 
-#     session["cart"]
-#     print(f"cart: {session['cart']}")
-#     return redirect("/")
+    try:
+        session["cart"].append(product_id)
+    except:
+        print("no cart")
+        session["cart"] = []
+   
+    print(f"cart: {session['cart']}")
+    return redirect("/")
 
 
 def readDB(query):    

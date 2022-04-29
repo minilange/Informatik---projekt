@@ -38,11 +38,10 @@
             </button>
             <span class="hide basket-popup">
                 Kurven indeholder:
-                <ul>
-                    <li>CPU</li>
-                    <li>GPU</li>
-                    <li>RAM</li>
-                    <li>SSD</li>
+                <ul class="list-group">
+                    {% for item in session["cart"] %}
+                    <li class="list-group-item">{{item}}</li>
+                    {% endfor %}
                 </ul>
             </span>
         </div>
