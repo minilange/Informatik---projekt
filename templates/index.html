@@ -24,7 +24,7 @@
             <p class="card-text">{{prod[3]}}</p>
             <p class="text-end mt-auto"><b>{{prod[2]}} kr.</b></p>
             <form action="/addToCart" method="post">
-                <input class="form-control mx-auto w-auto" id="product_id" name="product_id" type="hidden" value={{prod[1]}}>
+                <input class="form-control mx-auto w-auto" id="product_id" name="product_id" type="hidden" value="{{prod[1]}}">
                 <button class="btn btn-success mt-2" type="submit">Læg i kurv 🛒</button>
             </form>
         </div>

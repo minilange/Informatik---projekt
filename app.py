@@ -105,18 +105,23 @@ def contact():
 @app.route("/addToCart", methods=["GET", "POST"])
 def addToCart():
     product_id = request.form.get("product_id")
-    print('prod id: ',  product_id)
-    # if session["cart"] == None:
-    #     session["cart"] = []
+    
 
     try:
-        session["cart"].append(product_id)
-    except:
-        print("no cart")
-        session["cart"] = []
-   
-    print(f"cart: {session['cart']}")
-    return redirect("/")
+        if session["cart"].get(product_id) == None:
+            session["cart"][product_id] = 1
+            print(f"Added {product_id} to cart")
+        else:
+            session["cart"][product_id] += 1
+            print(f"Added {product_id} to cart with quantity {session['cart'][product_id]}")
+        
+        print(f"cart: {session['cart']}")
+        return redirect("/")
+    except KeyError:
+        print("session['cart'] is empty")
+        session["cart"] = {}
+        session["cart"][product_id] = 1
+        return redirect("/")
 
 
 def readDB(query):    
