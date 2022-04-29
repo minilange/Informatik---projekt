@@ -117,6 +117,17 @@ def admin():
     if not session.get("admin"):
         return redirect("/")
     
+    res = []
+
+    orders = readDB("SELECT name, email, `timestamp`, order_id FROM orders INNER JOIN users ON orders.user_id = users.id")
+    
+    for order in orders:
+        order[4] = readDB("SELECT products.name, products.price, products.description, products.image FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {order[3]}")
+    
+    return render_template("admin.html", orders=orders)
+
+
+
     return render_template("admin.html")
 
 @app.route("/addToCart", methods=["GET", "POST"])
