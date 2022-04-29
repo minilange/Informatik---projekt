@@ -163,6 +163,26 @@ def addToCart():
         session["cart"][product_id] = 1
         return redirect("/")
 
+@app.route("/cart", methods=["GET", "POST"])
+def cart():
+    
+    if request.method == "POST":
+        if not session.get("user_id"):
+            return redirect("/login")
+    else:
+        products = []
+        totalPrice = 0
+        if session.get("cart"):
+            for key in session["cart"]:
+                for i in range(session["cart"].get(key)):
+                    print(f"SELECT * FROM products WHERE id = {key}")
+                    product = readDB(f"SELECT * FROM products WHERE id = {key}")[0]
+                    products.append(product)
+                    totalPrice += product[2]
+
+
+        return render_template("cart.html", products=products, totalPrice=totalPrice)
+
 
 def readDB(query):    
     data = db.execute(query).fetchall()

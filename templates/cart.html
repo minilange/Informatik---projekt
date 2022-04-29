@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Product</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            <form action="/cart" method="post">
+                {% for product in products %}
+                <tr>
+                    <td><img src="{{product[5]}}.png" alt="product image" style="width: 100px;"></td>
+                    <td>{{ product[1] }}</td>
+                    <td>{{ product[2] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p>Total Price: {{totalPrice}}</p>
+        <button class="btn btn-primary" type="submit">Purchase</button>
+    </form>
+</div>
+{% endblock %}
