@@ -102,7 +102,19 @@ def register():
         if password != confirm:
             return render_template("register.html", error="Adgangskoder er ikke ens")
 
-        if len(password) < 8 or password.count(punctuation) == 0 or password.count(digits) == 0 or password.count(upper) == 0:
+        upper = False
+        punct = False
+        number = False
+
+        for ele in password:
+            if ele.isupper():
+                upper = True
+            elif ele.isnumeric():
+                number = True
+            elif ele in punctuation:
+                punct = True
+
+        if len(password) < 8 or not upper or not punct or not number:
             return render_template("register.html", error="Adgangskode skal indeholde mindst 8 tegn, 1 stort bogstav og 1 tal")
 
         dbUser = readDB(f"SELECT * FROM users WHERE username = '{username}'")
