@@ -93,7 +93,19 @@ def register():
         if password != confirm:
             return render_template("register.html", error="Passwords do not match")
 
-        if len(password) < 8 or password.count(punctuation) == 0 or password.count(digits) == 0 or password.count(upper) == 0:
+        upper = False
+        punct = False
+        number = False
+
+        for ele in password:
+            if ele.isupper():
+                upper = True
+            elif ele.isnumeric():
+                number = True
+            elif ele in punctuation:
+                punct = True
+
+        if len(password) < 8 or not upper or not punct or not number:
             return render_template("register.html", error="Password must contain at least 8 characters, 1 uppercase letter and 1 number")
 
         dbUser = readDB(f"SELECT * FROM users WHERE username = '{username}'")
