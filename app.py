@@ -94,21 +94,21 @@ def register():
         email = request.form.get("email")
 
         if username == "" or password == "" or confirm == "" or email == "":
-            return render_template("register.html", error="Please fill in all fields")
+            return render_template("register.html", error="Udfyld venligst alle felter")
 
         if email.count("@") != 1 and email.count(".") == 0:
-            return render_template("register.html", error="Please enter a valid email")
+            return render_template("register.html", error="Indtast venligst en gyldig email")
 
         if password != confirm:
-            return render_template("register.html", error="Passwords do not match")
+            return render_template("register.html", error="Adgangskoder er ikke ens")
 
         if len(password) < 8 or password.count(punctuation) == 0 or password.count(digits) == 0 or password.count(upper) == 0:
-            return render_template("register.html", error="Password must contain at least 8 characters, 1 uppercase letter and 1 number")
+            return render_template("register.html", error="Adgangskode skal indeholde mindst 8 tegn, 1 stort bogstav og 1 tal")
 
         dbUser = readDB(f"SELECT * FROM users WHERE username = '{username}'")
 
         if len(dbUser) != 0:
-            return render_template("register.html", error="Username is already taken")
+            return render_template("register.html", error="Brugernavn er allerede taget")
         
         db.execute("INSERT INTO users (username, password, email, admin) VALUES (?, ?, ?, 0)", (username, generate_password_hash(password), email))
         conn.commit()
