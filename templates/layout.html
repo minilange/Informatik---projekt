@@ -44,6 +44,7 @@
                 </span>
             </button>
             <span class="hide basket-popup">
+                {% if session["cart"] %}
                 Kurven indeholder:
                 <ul class="list-group list-group-flush">
                     {% for item in session["cart"] %}
@@ -52,6 +53,10 @@
                     
                     {% endfor %}
                 </ul>
+                {% else %}
+                Kurven er tom
+                {% endif %}
+
             </span>
         </div>
     </header>

@@ -31,7 +31,20 @@ def index():
     categories = readDB("SELECT * FROM categories")
     # print(f"table: {products}")
     # print(f"session: {session['test']}")    
-    return render_template("index.html", products=products, categories=categories)
+    return render_template("index.html", products=products, categories=categories, active_category='all')
+
+@app.route("/sortCategories", methods=["GET", "POST"])
+def sort():
+    category_name = request.form.get("category_name")
+    print(category_name)
+    category = readDB(f"SELECT * FROM categories WHERE name='{category_name}'")[0][0]
+    products = readDB(f"SELECT * FROM products WHERE category='{category}'")
+    categories = readDB("SELECT * FROM categories")
+    return render_template("index.html", products=products, categories=categories, active_category=category_name)
+
+@app.route("/resetCategories")
+def reset():
+    return redirect("/")
 
 @app.route("/about", methods=["GET", "POST"])
 def about():
