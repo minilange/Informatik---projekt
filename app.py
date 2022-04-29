@@ -31,7 +31,16 @@ def index():
     categories = readDB("SELECT * FROM categories")
     # print(f"table: {products}")
     # print(f"session: {session['test']}")    
-    return render_template("index.html", products=products, categories=categories)
+    return render_template("index.html", products=products, categories=categories, active_category='all')
+
+@app.route("/sortCategories", methods=["GET", "POST"])
+def sort():
+    category_name = request.form.get("category_name")
+    print(category_name)
+    category = readDB(f"SELECT * FROM categories WHERE name='{category_name}'")[0][0]
+    products = readDB(f"SELECT * FROM products WHERE category='{category}'")
+    categories = readDB("SELECT * FROM categories")
+    return render_template("index.html", products=products, categories=categories, active_category=category_name)
 
 @app.route("/about", methods=["GET", "POST"])
 def about():
@@ -85,13 +94,13 @@ def register():
         email = request.form.get("email")
 
         if username == "" or password == "" or confirm == "" or email == "":
-            return render_template("register.html", error="Please fill in all fields")
+            return render_template("register.html", error="Udfyld venligst alle felter")
 
         if email.count("@") != 1 and email.count(".") == 0:
-            return render_template("register.html", error="Please enter a valid email")
+            return render_template("register.html", error="Indtast venligst en gyldig email")
 
         if password != confirm:
-            return render_template("register.html", error="Passwords do not match")
+            return render_template("register.html", error="Adgangskoder er ikke ens")
 
         upper = False
         punct = False
@@ -106,12 +115,12 @@ def register():
                 punct = True
 
         if len(password) < 8 or not upper or not punct or not number:
-            return render_template("register.html", error="Password must contain at least 8 characters, 1 uppercase letter and 1 number")
+            return render_template("register.html", error="Adgangskode skal indeholde mindst 8 tegn, 1 stort bogstav og 1 tal")
 
         dbUser = readDB(f"SELECT * FROM users WHERE username = '{username}'")
 
         if len(dbUser) != 0:
-            return render_template("register.html", error="Username is already taken")
+            return render_template("register.html", error="Brugernavn er allerede taget")
         
         db.execute("INSERT INTO users (username, password, email, admin) VALUES (?, ?, ?, 0)", (username, generate_password_hash(password), email))
         conn.commit()

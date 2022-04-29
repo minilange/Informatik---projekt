@@ -26,16 +26,15 @@
             <li><a href="/admin" class="nav-link px-2 link-dark">Admin</a></li>
             {% endif %}
         </ul>
-        <div class="col-md-3 text-end">
+        <div class="col-md-3 text-end d-flex justify-content-end">
             {% if session["user_id"] %}
-            <li class="btn btn-outline-primary"><a href="/logout">log ud</a></li>
+            <li class="btn btn-outline-primary me-2"><a href="/logout">log ud</a></li>
             {% else %}
             <li class="btn btn-outline-primary me-2"><a href="/login">Login</a></li>
             {% endif %}
 
-            <button type="button" class="btn btn-outline-primary" id="basket-btn" onclick="basket()">
-                <a href="/cart">
-                    Kurv 🛒
+            <form action="/cart">
+                <button type="submit" class="btn btn-outline-primary" id="basket-btn" >Kurv 🛒
                     <span class="badge" id="basket-badge">
                         {% if session["cart"] %}
                         {{session["cart"]|length}}
@@ -43,25 +42,33 @@
                         0
                         {% endif %}
                     </span>
-                    </span>
-                </a>
-            </button>
-            <span class="hide basket-popup">
-                Kurven indeholder:
-                <ul class="list-group list-group-flush">
-                    {% for item in session["cart"] %}
-
-                    <li class="list-group-item"><b>{{session["cart"][item]}} x</b> {{item}}</li>
-
-                    {% endfor %}
-                </ul>
-            </span>
+                </button>
+                <span class="hide basket-popup">
+                    {% if session["cart"] %}
+                    Kurven indeholder:
+                    <ul class="list-group list-group-flush">
+                        {% for item in session["cart"] %}
+                        
+                        <li class="list-group-item"><b>{{session["cart"][item]}} x</b> {{item}}</li>
+                        
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    Kurven er tom
+                    {% endif %}
+                    
+                </span>
+            </form>
         </div>
     </header>
 
     <main>
         {% block main %}{% endblock %}
     </main>
+
+    <button type="button" class="btn btn-floating btn-lg" id="btn-back-to-top">
+        <span id="arrow-back-to-top">^</span> 
+    </button>
 
     <div class="container d-flex flex-column min-vh-10">
         <footer class="py-3 my-4 mt-auto">
@@ -71,4 +78,34 @@
     </div>
 </body>
 
+<<<<<<< HEAD
 </html>
+=======
+</html>
+
+<script>
+let scrollToTopBtn = document.getElementById("btn-back-to-top");
+
+window.onscroll = function () {
+  scrollFunction();
+};
+
+function scrollFunction() {
+  if (
+    document.body.scrollTop > 50 ||
+    document.documentElement.scrollTop > 50
+  ) {
+    scrollToTopBtn.style.display = "block";
+  } else {
+    scrollToTopBtn.style.display = "none";
+  }
+}
+// When the user clicks on the button, scroll to the top of the document
+scrollToTopBtn.addEventListener("click", backToTop);
+
+function backToTop() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+>>>>>>> 587e6f83cb19202b5f90a8186925de6fbc526b17
