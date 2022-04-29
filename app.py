@@ -40,9 +40,6 @@ def login():
 
     session.clear()
 
-    if not session["cart"]:
-        session["cart"] = []
-    
     if request.method == "POST":
         username = request.form.get("username")
         password = request.form.get("password")
@@ -105,16 +102,16 @@ def register():
 def contact():
     return render_template("contact.html")
 
-@app.route("/addToCart", methods=["GET", "POST"])
-def addToCart():
-    product_id = request.form.get("product_id")
+# @app.route("/addToCart", methods=["GET", "POST"])
+# def addToCart():
+#     product_id = request.form.get("product_id")
     
-    if session["cart"] == None:
-        session["cart"] = []
+#     if session["cart"] == None:
+#         session["cart"] = []
 
-    session["cart"]
-    print(f"cart: {session['cart']}")
-    return redirect("/")
+#     session["cart"]
+#     print(f"cart: {session['cart']}")
+#     return redirect("/")
 
 
 def readDB(query):    
