@@ -103,6 +103,12 @@ header {
     color: white;
 }
 
+/* GitHub */
+.fa-github {
+    background: #333333;
+    color: white;
+}
+
 /* Basket hover */
 .hide {
     display: none;
