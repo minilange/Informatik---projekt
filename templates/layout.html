@@ -36,7 +36,7 @@
             <button type="button" class="btn btn-outline-primary" id="basket-btn" onclick="basket()">Kurv 🛒
                 <span class="badge" id="basket-badge">
                     {% if session["cart"] %}
-                    {{session["cart"]|length}}
+                    {{session["cart"]|length}} 
                     {% else %}
                     0
                     {% endif %}

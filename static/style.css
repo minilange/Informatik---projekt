@@ -82,7 +82,6 @@ header {
     color: white;
 }
 
-
 /* .fa Icons */
 .fa {
     padding: 10px;
@@ -153,6 +152,14 @@ header {
   
 #basket-btn:hover + .hide {
     display: block;
+}
+
+/* Login/register pages */
+.register-btn {
+    padding: 0;
+    margin-left: 2px;
+    vertical-align: top;
+    color: #0d6efd;
 }
 
 /* Scrollbar design */
