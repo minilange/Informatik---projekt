@@ -169,10 +169,12 @@ def addToCart():
 
     try:
         if session["cart"].get(product_id) == None:
-            session["cart"][product_id] = 1
+            session["cart"][product_id] = []
+            session["cart"][product_id].append(1)
+            session["cart"][product_id].append(request.form.get("product_name"))
             print(f"Added {product_id} to cart")
         else:
-            session["cart"][product_id] += 1
+            session["cart"][product_id][0] += 1
             print(f"Added {product_id} to cart with quantity {session['cart'][product_id]}")
         
         print(f"cart: {session['cart']}")
@@ -180,7 +182,9 @@ def addToCart():
     except KeyError:
         print("session['cart'] is empty")
         session["cart"] = {}
-        session["cart"][product_id] = 1
+        session["cart"][product_id] = []
+        session["cart"][product_id].append(1)
+        session["cart"][product_id].append(request.form.get("product_name"))
         return redirect("/")
 
 @app.route("/cart", methods=["GET", "POST"])
@@ -208,12 +212,12 @@ def cart():
         totalPrice = 0
         if session.get("cart"):
             for key in session["cart"]:
-                # for i in range(session["cart"].get(key)):
-                    print(f"SELECT * FROM products WHERE id = {key}")
-                    product = readDB(f"SELECT * FROM products WHERE id = {key}")[0]
-                    products.append(product)
-                    totalPrice += product[2]
+                product = readDB(f"SELECT * FROM products WHERE id = {key}")[0]
+                product.append(session["cart"][key][0])
+                products.append(product)
+                totalPrice += product[2]
 
+        print(products)
         return render_template("cart.html", products=products, totalPrice=totalPrice)
 
 
