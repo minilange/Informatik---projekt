@@ -7,6 +7,7 @@
             <tr>
                 <th></th>
                 <th>Product</th>
+                <th>Antal</th>
                 <th>Price</th>
             </tr>
         </thead>
@@ -16,12 +17,13 @@
                 <tr>
                     <td><img src="{{product[5]}}.png" alt="product image" style="width: 100px;"></td>
                     <td>{{ product[1] }}</td>
+                    <td><input placeholder="1" type="number" onfocusout="updateQuantity()" min="1" max="5"></td>
                     <td>{{ product[2] }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
-        <p>Total Price: {{totalPrice}}</p>
+        <p>I alt: {{totalPrice}} DKK</p>
         <button class="btn btn-primary" type="submit">Purchase</button>
     </form>
 </div>
