@@ -2,6 +2,7 @@
 import sqlite3 as SQL
 from string import punctuation
 from flask import Flask, redirect, render_template, request, session
+from datetime import datetime
 from flask_session.__init__ import Session
 from string import punctuation, digits, ascii_lowercase as lower, ascii_uppercase as upper
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -138,18 +139,28 @@ def admin():
     if not session.get("admin"):
         return redirect("/")
     
-    res = []
+    orders = []
 
-    orders = readDB("SELECT `username`, email, `timestamp`, order_id FROM orders INNER JOIN users ON orders.user_id = users.id")
-    
-    for order in orders:
-        order[4] = readDB("SELECT products.name, products.price, products.description, products.image FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {order[3]}")
-    
+    users = readDB("SELECT `username`, email, `timestamp`, `order_id` FROM orders INNER JOIN users ON orders.user_id = users.id")
+    # orders = readDB(f"SELECT * FROM orderlines WHERE order_id = {user[3]}")
+    print(f"before: {orders}")
+
+    for user in users:
+        tmp_orders = {}
+        tmp_orders["user_info"] = user
+        tmp_orders["products"] = readDB(f"SELECT p.name, p.price, p.category, p.image FROM orderlines INNER JOIN products AS p ON orderlines.product_id = p.id WHERE order_id = {user[3]}")
+        tmp_orders["total_price"] = readDB(f"SELECT SUM(price) FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {user[3]}")[0][0]
+        orders.append(tmp_orders)
+        # purchases = readDB(f"SELECT p.name, p.price, p.category, p.image FROM orderlines INNER JOIN products AS p ON orderlines.product_id = p.id WHERE order_id = {user[3]}")
+
+        # print(readDB(f"SELECT * FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {order[3]}"))
+        # order.append(readDB(f"SELECT products.name, products.price, products.description, products.image FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {order[3]}")[0])
+        # order = readDB(f"SELECT products.name, products.price, products.description, products.image FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {order[2]}")[0]
+
+    print(f"after: {orders}")
     return render_template("admin.html", orders=orders)
 
-
-
-    return render_template("admin.html")
+    # return render_template("admin.html")
 
 @app.route("/addToCart", methods=["GET", "POST"])
 def addToCart():
@@ -178,17 +189,30 @@ def cart():
     if request.method == "POST":
         if not session.get("user_id"):
             return redirect("/login")
+        
+        print(f"INSERT INTO orders (user_id, timestamp) VALUES ({session['user_id']}, '{datetime.now()}')")
+        db.execute(f"INSERT INTO orders (user_id, timestamp) VALUES ({session['user_id']}, '{datetime.now()}')")
+        conn.commit()
+
+        order_id = readDB(f"SELECT order_id FROM orders WHERE user_id = {session['user_id']} ORDER BY timestamp DESC LIMIT 1")[0][0]
+
+        for product_id in session["cart"]:
+            for i in range(session["cart"][product_id]):
+                db.execute(f"INSERT INTO orderlines (order_id, product_id) VALUES ({order_id}, {product_id})")
+                conn.commit()
+
+        session["cart"] = {}
+        return redirect("/")
     else:
         products = []
         totalPrice = 0
         if session.get("cart"):
             for key in session["cart"]:
-                for i in range(session["cart"].get(key)):
+                # for i in range(session["cart"].get(key)):
                     print(f"SELECT * FROM products WHERE id = {key}")
                     product = readDB(f"SELECT * FROM products WHERE id = {key}")[0]
                     products.append(product)
                     totalPrice += product[2]
-
 
         return render_template("cart.html", products=products, totalPrice=totalPrice)
 

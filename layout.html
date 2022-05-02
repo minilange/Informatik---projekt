@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="./static/style.css">
+    <title>Webshop</title>
+</head>
+
+<body class="container">
+    <header
+        class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between top-0 py-3 mb-4 border-bottom position-sticky">
+        <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+            T E C H L O G I C
+        </a>
+
+        <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+            <li><a href="/" class="nav-link px-2 link-secondary">Hjem</a></li>
+            <li><a href="/about" class="nav-link px-2 link-dark">Om</a></li>
+            <li><a href="/contact" class="nav-link px-2 link-dark">Kontakt</a></li>
+            {% if session["admin"] %}
+            <li><a href="/admin" class="nav-link px-2 link-dark">Admin</a></li>
+            {% endif %}
+        </ul>
+        <div class="col-md-3 text-end d-flex justify-content-end">
+            {% if session["user_id"] %}
+            <li class="btn btn-outline-primary me-2"><a href="/logout">log ud</a></li>
+            {% else %}
+            <li class="btn btn-outline-primary me-2"><a href="/login">Login</a></li>
+            {% endif %}
+
+            <form action="/cart">
+                <button type="submit" class="btn btn-outline-primary" id="basket-btn" >Kurv 🛒
+                    <span class="badge" id="basket-badge">
+                        {% if session["cart"] %}
+                        {{session["cart"]|length}}
+                        {% else %}
+                        0
+                        {% endif %}
+                    </span>
+                </button>
+                <span class="hide basket-popup">
+                    {% if session["cart"] %}
+                    Kurven indeholder:
+                    <ul class="list-group list-group-flush">
+                        {% for item in session["cart"] %}
+                        
+                        <li class="list-group-item"><b>{{session["cart"][item]}} x</b> {{item}}</li>
+                        
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    Kurven er tom
+                    {% endif %}
+                    
+                </span>
+            </form>
+        </div>
+    </header>
+
+    <main>
+        {% block main %}{% endblock %}
+    </main>
+
+    <button type="button" class="btn btn-floating btn-lg" id="btn-back-to-top">
+        <span id="arrow-back-to-top">^</span> 
+    </button>
+
+    <div class="container d-flex flex-column min-vh-10">
+        <footer class="py-3 my-4 mt-auto">
+            <hr />
+            <p class="text-center text-muted">© 2022 TECHLOGIC A/S</p>
+        </footer>
+    </div>
+</body>
+
+</html>
+
+<script>
+let scrollToTopBtn = document.getElementById("btn-back-to-top");
+
+window.onscroll = function () {
+  scrollFunction();
+};
+
+function scrollFunction() {
+  if (
+    document.body.scrollTop > 50 ||
+    document.documentElement.scrollTop > 50
+  ) {
+    scrollToTopBtn.style.display = "block";
+  } else {
+    scrollToTopBtn.style.display = "none";
+  }
+}
+// When the user clicks on the button, scroll to the top of the document
+scrollToTopBtn.addEventListener("click", backToTop);
+
+function backToTop() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
