@@ -187,13 +187,12 @@ def cart():
         totalPrice = 0
         if session.get("cart"):
             for key in session["cart"]:
-                for i in (session["cart"].get(key)):
-                    print(f"SELECT * FROM products WHERE id = {key[0]}")
-                    product = readDB(f"SELECT * FROM products WHERE id = {key[0]}")[0]
-                    products.append(product)
-                    totalPrice += product[2]
+                product = readDB(f"SELECT * FROM products WHERE id = {key}")[0]
+                product.append(session["cart"][key][0])
+                products.append(product)
+                totalPrice += product[2]
 
-
+        print(products)
         return render_template("cart.html", products=products, totalPrice=totalPrice)
 
 
