@@ -31,12 +31,48 @@
                     <td></td>
                 </tr>
         </tbody>
-    </table>
-    {% if totalPrice > 0 %}
-    <div class="text-end my-3">
-        <button class="btn btn-success py-3 px-4 m-3" type="submit"><b>Køb</b></button>
-    </div>
-    {% endif %}        
-    </form>
+    </table>     
 </div>
+
+{% if totalPrice > 0 %}
+    <div class="container">
+        <div class="row">
+            <form>
+                <div class="row col-6">
+                    <h4>Person Information</h4>
+                    <label for="firstname" autofocus><i class="fa fa-user"></i>Fulde navn</label>
+                    <input type="text" id="firstname" name="firstname" placeholder="Carl Lee Ladefoged">
+                
+                    <label for="email"><i class="fa fa-envelope"></i>Email</label>
+                    <input type="text" id="email" name="email" placeholder="Carl@gmail.com">
+
+                    <label for="adress"><i class="fa fa-home"></i>Adresse</label><br>
+                    <input type="text" id="adress" name="adress" placeholder="Vestergade 1">
+
+                    <label for="postalcode"><i class="fa fa-map-marker"></i>Postnummer</label>
+                    <input type="text" id="postalcode" name="postalcode" placeholder="8530">
+
+                    <label for="city"><i class="fa fa-institution"></i>By</label>
+                    <input type="text" id="city" name="city" placeholder="Aalborg">
+                </div>
+
+                <div class="row col-5">
+                    <h4>Betaling</h4>
+                    <label><i class="fa fa-credit-card"></i>Kortnummer</label>
+                    <input type="text" id="cardnumber" name="cardnumber" placeholder="xxxx-xxxx-xxxx-xxxx">
+
+                    <label><i class="fa fa-calendar"></i>Udløbsdato</label>
+                    <input type="text" id="expirationdate" name="expirationdate" placeholder="MM/YY">
+
+                    <label><i class="fa fa-lock"></i>CVC</label>
+                    <input type="text" id="cvc" name="cvc" placeholder="xxx">
+                </div>
+            
+                <div class="text-end my-3">
+                    <button class="btn btn-success py-3 px-4 m-3" type="submit"><b>Køb</b></button>
+                </div>
+                </form>
+        </div>
+    </div>
+{% endif %}   
 {% endblock %}
