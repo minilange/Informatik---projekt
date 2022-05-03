@@ -1,3 +1,4 @@
+from math import prod
 import sqlite3 as SQL
 from string import punctuation
 from flask import Flask, redirect, render_template, request, session
@@ -29,8 +30,7 @@ def after_request(response):
 def index():
     products = readDB("SELECT * FROM products")
     categories = readDB("SELECT * FROM categories")
-    # print(f"table: {products}")
-    # print(f"session: {session['test']}")    
+    
     return render_template("index.html", products=products, categories=categories, active_category='all')
 
 @app.route("/sortCategories", methods=["GET", "POST"])
@@ -40,6 +40,7 @@ def sort():
     category = readDB(f"SELECT * FROM categories WHERE name='{category_name}'")[0][0]
     products = readDB(f"SELECT * FROM products WHERE category='{category}'")
     categories = readDB("SELECT * FROM categories")
+
     return render_template("index.html", products=products, categories=categories, active_category=category_name)
 
 @app.route("/about", methods=["GET", "POST"])
@@ -65,7 +66,6 @@ def login():
         
         dbUser = dbUser[0]
         
-        # CHECK USING A HASING FUNCTION
         if not check_password_hash(dbUser[3], password):
             return render_template("login.html", error="Incorrect username and/or password")
 
@@ -124,6 +124,7 @@ def register():
         
         db.execute("INSERT INTO users (username, password, email, admin) VALUES (?, ?, ?, 0)", (username, generate_password_hash(password), email))
         conn.commit()
+
         return redirect("/login")
     else:
         print("This is a get request")
@@ -131,35 +132,28 @@ def register():
 
 @app.route("/contact")
 def contact():
+
     return render_template("contact.html")
 
 @app.route("/admin")
 def admin():
+
     if not session.get("admin"):
         return redirect("/")
     
     orders = []
 
     users = readDB("SELECT `username`, email, `timestamp`, `order_id` FROM orders INNER JOIN users ON orders.user_id = users.id")
-    # orders = readDB(f"SELECT * FROM orderlines WHERE order_id = {user[3]}")
-    # print(f"before: {orders}")
 
     for user in users:
         tmp_orders = {}
         tmp_orders["user_info"] = user
-        tmp_orders["products"] = readDB(f"SELECT p.name, p.price, p.category, p.image FROM orderlines INNER JOIN products AS p ON orderlines.product_id = p.id WHERE order_id = {user[3]}")
+        tmp_orders["products"] = readDB(f"SELECT p.name, p.price, p.category, p.image, orderlines.quantity FROM orderlines INNER JOIN products AS p ON orderlines.product_id = p.id WHERE order_id = {user[3]}")
+
         tmp_orders["total_price"] = readDB(f"SELECT SUM(price) FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {user[3]}")[0][0]
         orders.append(tmp_orders)
-        # purchases = readDB(f"SELECT p.name, p.price, p.category, p.image FROM orderlines INNER JOIN products AS p ON orderlines.product_id = p.id WHERE order_id = {user[3]}")
 
-        # print(readDB(f"SELECT * FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {order[3]}"))
-        # order.append(readDB(f"SELECT products.name, products.price, products.description, products.image FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {order[3]}")[0])
-        # order = readDB(f"SELECT products.name, products.price, products.description, products.image FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {order[2]}")[0]
-
-    # print(f"after: {orders}")
     return render_template("admin.html", orders=orders)
-
-    # return render_template("admin.html")
 
 @app.route("/addToCart", methods=["GET", "POST"])
 def addToCart():
@@ -201,7 +195,6 @@ def cart():
         if not session.get("user_id"):
             return redirect("/login")
         
-        print(f"INSERT INTO orders (user_id, timestamp) VALUES ({session['user_id']}, '{datetime.now()}')")
         db.execute(f"INSERT INTO orders (user_id, timestamp) VALUES ({session['user_id']}, '{datetime.now()}')")
         conn.commit()
 
@@ -209,9 +202,9 @@ def cart():
 
         for product_id in session["cart"]:
             print(session["cart"][product_id])
-            for i in range(session["cart"][product_id][0]):
-                db.execute(f"INSERT INTO orderlines (order_id, product_id) VALUES ({order_id}, {product_id})")
-                conn.commit()
+            
+            db.execute(f"INSERT INTO orderlines (order_id, product_id, quantity) VALUES ({order_id}, {product_id}, {session['cart'][product_id][0]})")
+            conn.commit()
 
         session["cart"] = {}
         return redirect("/")
@@ -225,7 +218,6 @@ def cart():
                 products.append(product)
                 totalPrice += product[2]
 
-        print(products)
         return render_template("cart.html", products=products, totalPrice=totalPrice)
 
 
@@ -244,7 +236,7 @@ def updateQuantity():
 
 def readDB(query):    
     data = db.execute(query).fetchall()
-    # print(f"fetch data: {data}")
+    
     newData = []
     for row in data:
         tmp = []

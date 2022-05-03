@@ -22,8 +22,9 @@
             <td class="p-3">
                 {% for product in order["products"] %}
                 <ul class="w-auto">
-                        <img style="width: 50px;" class="d-inline" src="{{product[3]}}.png" alt="{{product[0]}} image">
-                        <p class="d-inline">{{product[0]}}, {{product[1]}} kr.</p>
+                    <p class="d-inline">{{product[4]}}x </p>
+                    <img style="width: 50px;" class="d-inline" src="{{product[3]}}.png" alt="{{product[0]}} image">
+                    <p class="d-inline">{{product[0]}}, {{product[1]}} kr.</p>
                 </ul>
                 {% endfor %}
             </td>
