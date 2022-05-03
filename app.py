@@ -1,5 +1,3 @@
-
-from crypt import methods
 import sqlite3 as SQL
 from string import punctuation
 from flask import Flask, redirect, render_template, request, session
@@ -230,15 +228,6 @@ def cart():
         print(products)
         return render_template("cart.html", products=products, totalPrice=totalPrice)
 
-
-@app.route("/removeOrder", methods=["GET", "POST"])
-def removeOrder():
-    order_id = request.args.get("id")
-    db.execute(f"DELETE FROM orderlines WHERE order_id = {order_id}")
-    db.execute(f"DELETE FROM orders WHERE order_id = {order_id}")
-    conn.commit()
-    return redirect("/admin")
-
 def readDB(query):    
     data = db.execute(query).fetchall()
     # print(f"fetch data: {data}")
@@ -266,7 +255,7 @@ if __name__ == "__main__":
 # INSERT INTO products (name, price, description, category, image, quantity) VALUES ('AMD Ryzen 7 5800X', 2650, 'Processor 3.8 GHz, Unlocked 8 kerner, 16 tråde, 36MB cache', 1, 'https://gyazo.com/cbd003d4232bb7587014445017e8c5a7', 100);
 # INSERT INTO products (name, price, description, category, image, quantity) VALUES ('AMD Ryzen 5 5600X', 1899, 'Processor 3.7 GHz, Unlocked 6 kerner, 12 tråde, 32MB cache', 1, 'https://gyazo.com/a8443ef6b41a276586b712f717ed24b7', 100);
 # INSERT INTO products (name, price, description, category, image, quantity) VALUES ('Intel Core i9-12900K Alder Lake', 4790, 'Processor 3.2 GHz, Unlocked 12 kerner, 24 tråde, 14MB cache', 1, 'https://gyazo.com/5df21c3e03f8688ed41d2b14a2440c7c', 100);
-# INSERT INTO products (name, price, description, category, image, quantity) VALUES ('Intel Core i7-12700K Alder Lake', 3290, 'Processor 3.6 GHz, Unlocked 12 kerner, 20 tråde, 12MB cache', 1, 'https://gyazo.com/b4b0dad68f6fe2c64da058a5bd2849ae', 100);
+# INSERT INTO products (name, price, description, category, image, quantity) VALUES ('Intel Core i7-12700K Alder Lake', 3290, 'Processor 3.6 GHz, Unlocked 12 kerner, 20 tråde, 12MB cache', 1, 'https://gyazo.com/b4b0dad68f6fe2c64da058a5bd2849ae', 100;
 # INSERT INTO products (name, price, description, category, image, quantity) VALUES ('Intel Core i5-12600K Alder Lake', 2400, 'Processor 3.7 GHz, Unlocked 10 kerner, 16 tråde, 9.5MB cache', 1, 'https://gyazo.com/41ce16644196cb155a5a195afb78b29c', 100);
 # INSERT INTO products (name, price, description, category, image, quantity) VALUES ('Corsair RM850', 999, 'Strømforsyning ATX12V 2.52 / EPS12V 2.92, 80 Plus Gold, 850Watt', 2, 'https://gyazo.com/3c03b75202f58e0c4df342088b761a52', 100);
 # INSERT INTO products (name, price, description, category, image, quantity) VALUES ('Corsair RM1000x', 1399, 'Strømforsyning ATX12V 2.4 / EPS12V 2.92, 80 Plus Gold, 1000Watt', 2, 'https://gyazo.com/5bb7e9b4ace75a3a410f416386ee33f6', 100);
