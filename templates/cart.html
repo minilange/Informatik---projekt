@@ -20,6 +20,7 @@
                     <td><input placeholder="1" type="number" onfocusout="updateQuantity()" min="1" max="5" value={{ product[7] }}></td>
                     <!-- <td>{{product[6]}}</td> -->
                     <td>{{ product[2] }}</td>
+                    <td><button action="/removeFromCart?id={{product[0]}}">X</button></td>
                 </tr>
                 {% endfor %}
             </tbody>

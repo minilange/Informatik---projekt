@@ -186,6 +186,15 @@ def addToCart():
         session["cart"][product_id].append(request.form.get("product_name"))
         return redirect("/")
 
+@app.route("/removeFromCart", methods=["GET", "POST"])
+def removeFromCart():
+    product_id = request.args.get("id")
+    
+    session["cart"].pop(product_id, None)
+    print(f"cart: {session['cart']}")
+    return redirect("/")
+
+
 @app.route("/cart", methods=["GET", "POST"])
 def cart():
     
