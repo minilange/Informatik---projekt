@@ -5,10 +5,11 @@
     <table class="table">
         <thead class="thead-light">
             <tr>
-                <th scope="col"></th>
+                <th></th>
                 <th scope="col">Produkt</th>
                 <th scope="col">Antal</th>
                 <th scope="col">Pris</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -19,7 +20,7 @@
                     <td>{{ product[1] }}</td>
                             <td><input class="form-control w-auto p-1" placeholder="1" type="number" onfocusout="updateQuantity()" min="1" max="12" value={{ product[7] }}></td>
                     <td>{{ product[2] }} kr.</td>
-                    <td><button action="/removeFromCart?id={{product[0]}}">X</button></td>
+                    <td><button class="btn" action="/removeFromCart?id={{product[0]}}"><h5>X</h5></button></td>
                 </tr>
                 {% endfor %}
                 <tr class="align-middle">
@@ -27,6 +28,7 @@
                     <td></td>
                     <td class="text-end pt-3">I alt: </td>
                     <td class="pt-4"><h5><b>{{totalPrice}} kr.</b></h5></td>
+                    <td></td>
                 </tr>
         </tbody>
     </table>

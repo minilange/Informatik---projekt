@@ -1,24 +1,48 @@
 {% extends 'layout.html' %}
 
 {% block main %}
-<table class="table">
+<h1>Ordrer</h1>
+<table class="table table-hover table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>Brugernavn</th>
+            <th scope="col">E-mail</th>
+            <th scope="col">Dato</th>
+            <th scope="col">Produkter</th>
+            <th>Ordretotal</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
     <tbody>
         {% for order in orders %}
-        <tr>
+        <tr class="align-middle">
             <td>{{ order["user_info"][0] }}</td>
             <td>{{ order["user_info"][1] }}</td>
             <td>{{ order["user_info"][2][:-7] }}</td>
-            <td>
+            <td class="p-3">
                 {% for product in order["products"] %}
                 <ul>
                     <span>
                         <img style="width: 100px;" src="{{product[3]}}.png" alt="{{product[0]}} image">
-                        <p>{{product[0]}}, {{product[1]}}kr.</p>
+                        <p>{{product[0]}}, {{product[1]}} kr.</p>
                     </span>
                 </ul>
                 {% endfor %}
             </td>
-            <td><b>Total: </b>{{ order["total_price"] }}kr.</td>
+            <td><b>{{ order["total_price"] }} kr.</b></td>
+            <td>
+                {% if order["status"] == "0" %}
+                <p>Ikke betalt</p>
+                {% else %}
+                <p>Betalt</p>
+                {% endif %}
+                </td> 
+            <td>
+                <form action="/removeOrder" method="post">
+                    <input type="hidden" name="order_id" value="{{order["id"]}}">
+                    <button class="btn btn-danger" type="submit">Fjern</button>
+                </form>
         </tr>
         {% endfor %}
     </tbody>

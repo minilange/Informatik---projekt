@@ -1,4 +1,5 @@
 
+from crypt import methods
 import sqlite3 as SQL
 from string import punctuation
 from flask import Flask, redirect, render_template, request, session
@@ -228,6 +229,15 @@ def cart():
 
         print(products)
         return render_template("cart.html", products=products, totalPrice=totalPrice)
+
+
+@app.route("/removeOrder", methods=["GET", "POST"])
+def removeOrder():
+    order_id = request.args.get("id")
+    db.execute(f"DELETE FROM orderlines WHERE order_id = {order_id}")
+    db.execute(f"DELETE FROM orders WHERE order_id = {order_id}")
+    conn.commit()
+    return redirect("/admin")
 
 def readDB(query):    
     data = db.execute(query).fetchall()
