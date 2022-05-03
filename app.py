@@ -209,7 +209,8 @@ def cart():
         order_id = readDB(f"SELECT order_id FROM orders WHERE user_id = {session['user_id']} ORDER BY timestamp DESC LIMIT 1")[0][0]
 
         for product_id in session["cart"]:
-            # for i in range(session["cart"][product_id]):
+            print(session["cart"][product_id])
+            for i in range(session["cart"][product_id][0]):
                 db.execute(f"INSERT INTO orderlines (order_id, product_id) VALUES ({order_id}, {product_id})")
                 conn.commit()
 
