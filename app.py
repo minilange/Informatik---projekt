@@ -187,6 +187,15 @@ def addToCart():
         session["cart"][product_id].append(request.form.get("product_name"))
         return redirect("/")
 
+@app.route("/removeFromCart", methods=["GET", "POST"])
+def removeFromCart():
+    product_id = request.args.get("id")
+    
+    session["cart"].pop(product_id, None)
+    print(f"cart: {session['cart']}")
+    return redirect("/")
+
+
 @app.route("/cart", methods=["GET", "POST"])
 def cart():
     
@@ -201,7 +210,7 @@ def cart():
         order_id = readDB(f"SELECT order_id FROM orders WHERE user_id = {session['user_id']} ORDER BY timestamp DESC LIMIT 1")[0][0]
 
         for product_id in session["cart"]:
-            for i in range(session["cart"][product_id]):
+            # for i in range(session["cart"][product_id]):
                 db.execute(f"INSERT INTO orderlines (order_id, product_id) VALUES ({order_id}, {product_id})")
                 conn.commit()
 
