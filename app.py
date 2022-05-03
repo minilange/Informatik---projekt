@@ -1,3 +1,4 @@
+from math import prod
 import sqlite3 as SQL
 from string import punctuation
 from flask import Flask, redirect, render_template, request, session
@@ -147,7 +148,9 @@ def admin():
     for user in users:
         tmp_orders = {}
         tmp_orders["user_info"] = user
-        tmp_orders["products"] = readDB(f"SELECT p.name, p.price, p.category, p.image FROM orderlines INNER JOIN products AS p ON orderlines.product_id = p.id WHERE order_id = {user[3]}")
+        # tmp_orders["products"] = readDB(f"SELECT p.name, p.price, p.category, p.image FROM orderlines INNER JOIN products AS p ON orderlines.product_id = p.id WHERE order_id = {user[3]}")
+        products = readDB(f"SELECT p.name, p.price, p.category, p.image, orderlines.quantity FROM orderlines INNER JOIN products AS p ON orderlines.product_id = p.id WHERE order_id = {user[3]}")
+
         tmp_orders["total_price"] = readDB(f"SELECT SUM(price) FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {user[3]}")[0][0]
         orders.append(tmp_orders)
         # purchases = readDB(f"SELECT p.name, p.price, p.category, p.image FROM orderlines INNER JOIN products AS p ON orderlines.product_id = p.id WHERE order_id = {user[3]}")
@@ -209,9 +212,9 @@ def cart():
 
         for product_id in session["cart"]:
             print(session["cart"][product_id])
-            for i in range(session["cart"][product_id][0]):
-                db.execute(f"INSERT INTO orderlines (order_id, product_id) VALUES ({order_id}, {product_id})")
-                conn.commit()
+            # for i in range(session["cart"][product_id][0]):
+            db.execute(f"INSERT INTO orderlines (order_id, product_id, quantity) VALUES ({order_id}, {product_id}, {session['cart'][product_id][0]})")
+            conn.commit()
 
         session["cart"] = {}
         return redirect("/")
