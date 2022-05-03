@@ -163,7 +163,6 @@ header {
     display: block;
 }
 
-
 #basket-btn.basket-popup::after{
     width: 100%;
     height: 40px;

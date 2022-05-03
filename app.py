@@ -1,5 +1,3 @@
-
-from crypt import methods
 import sqlite3 as SQL
 from string import punctuation
 from flask import Flask, redirect, render_template, request, session
@@ -144,7 +142,7 @@ def admin():
 
     users = readDB("SELECT `username`, email, `timestamp`, `order_id` FROM orders INNER JOIN users ON orders.user_id = users.id")
     # orders = readDB(f"SELECT * FROM orderlines WHERE order_id = {user[3]}")
-    print(f"before: {orders}")
+    # print(f"before: {orders}")
 
     for user in users:
         tmp_orders = {}
@@ -158,7 +156,7 @@ def admin():
         # order.append(readDB(f"SELECT products.name, products.price, products.description, products.image FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {order[3]}")[0])
         # order = readDB(f"SELECT products.name, products.price, products.description, products.image FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {order[2]}")[0]
 
-    print(f"after: {orders}")
+    # print(f"after: {orders}")
     return render_template("admin.html", orders=orders)
 
     # return render_template("admin.html")
@@ -234,6 +232,7 @@ def cart():
 @app.route("/removeOrder", methods=["GET", "POST"])
 def removeOrder():
     order_id = request.args.get("id")
+    print(f"removeOrder: {order_id}")
     db.execute(f"DELETE FROM orderlines WHERE order_id = {order_id}")
     db.execute(f"DELETE FROM orders WHERE order_id = {order_id}")
     conn.commit()
