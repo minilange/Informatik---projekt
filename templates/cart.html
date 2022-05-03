@@ -17,10 +17,9 @@
                 <tr class="align-middle">
                     <td scope="row"><img src="{{product[5]}}.png" alt="product image" style="width: 75px;"></td>
                     <td>{{ product[1] }}</td>
-                    <td><input class="form-control w-auto p-1" placeholder="1" type="number" onfocusout="updateQuantity()" min="1" max="12" value={{
-                            product[6] }}></td>
-                    <!-- <td>{{product[6]}}</td> -->
+                            <td><input class="form-control w-auto p-1" placeholder="1" type="number" onfocusout="updateQuantity()" min="1" max="12" value={{ product[7] }}></td>
                     <td>{{ product[2] }} kr.</td>
+                    <td><button action="/removeFromCart?id={{product[0]}}">X</button></td>
                 </tr>
                 {% endfor %}
                 <tr class="align-middle">
@@ -31,9 +30,11 @@
                 </tr>
         </tbody>
     </table>
+    {% if totalPrice > 0 %}
     <div class="text-end my-3">
         <button class="btn btn-success py-3 px-4 m-3" type="submit"><b>Køb</b></button>
     </div>
+    {% endif %}        
     </form>
 </div>
 {% endblock %}
