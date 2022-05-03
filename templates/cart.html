@@ -31,7 +31,9 @@
                 <td><b>{{totalPrice}} kr.</b></td>
             </tr>
         </table>
-                <button class="btn btn-success p-3" type="submit"><span class=""><b>Køb</b></span></button>
+        {% if totalPrice > 0 %}
+            <button class="btn btn-success p-3" type="submit"><span class=""><b>Køb</b></span></button>
+        {% endif %}
     </form>
 </div>
 {% endblock %}
