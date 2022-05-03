@@ -33,6 +33,12 @@
             <h5 class="card-title">{{prod[1]}}</h5>
             <p class="card-text">{{prod[3]}}</p>
             <p class="text-end mt-auto"><b>{{prod[2]}} kr.</b></p>
+            <p class="text-start mt-auto">Lager status</p>
+            {% if prod[6] > 99 %}
+                <p class="text-start mt-auto">99+</p>
+            {% else %}
+                <p class="text-start mt-auto">{{prod[6]}} stk.</p>
+            {% endif %}
             <form action="/addToCart" method="post">
                 <input class="form-control mx-auto w-auto" id="product_id" name="product_id" type="hidden" value="{{prod[0]}}">
                 <input class="form-control mx-auto w-auto" id="product_name" name="product_name" type="hidden" value="{{prod[1]}}">
