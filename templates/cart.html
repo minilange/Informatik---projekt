@@ -18,16 +18,26 @@
                 <tr class="align-middle">
                     <td scope="row"><img src="{{product[5]}}.png" alt="product image" style="width: 75px;"></td>
                     <td>{{ product[1] }}</td>
-                            <td><input class="form-control w-auto p-1" placeholder="1" type="number" onfocusout="updateQuantity()" min="1" max="12" value={{ product[7] }}></td>
-                    <td>{{ product[2] }} kr.</td>
-                    <td><button class="btn" action="/removeFromCart?id={{product[0]}}"><h5>X</h5></button></td>
+                    <td>
+                        <input type="hidden" id="product_id" value="{{product[0]}}">
+                        <input class="form-control w-auto p-1" id="quantity_input" placeholder="1" type="number"
+                            onfocusout="updateQuantity(this)" min="1" max="12" value={{ product[7] }}>
+                    </td>
+                    <td>
+                        <pspan class="price-paragraph">{{ product[2] * product[7]}}</span> kr.
+                    </td>
+                    <td><button class="btn" action="/removeFromCart?id={{product[0]}}">
+                            <span class="text-danger">X</span>
+                        </button></td>
                 </tr>
                 {% endfor %}
                 <tr class="align-middle">
                     <td></td>
                     <td></td>
                     <td class="text-end pt-3">I alt: </td>
-                    <td class="pt-4"><h5><b>{{totalPrice}} kr.</b></h5></td>
+                    <td class="pt-4">
+                        <h5 id="total-price"><b></b></h5>
+                    </td>
                     <td></td>
                 </tr>
         </tbody>
@@ -36,7 +46,48 @@
     <div class="text-end my-3">
         <button class="btn btn-success py-3 px-4 m-3" type="submit"><b>Køb</b></button>
     </div>
-    {% endif %}        
+    {% endif %}
     </form>
 </div>
+
+<script>
+    setTotalPrice();
+
+    function updateQuantity(e) {
+        var id = e.parentElement.children[0].value;
+        var quantity = e.value;
+        var url = "/updateQuantity?id=" + id + "&quantity=" + quantity;
+
+        setTotalPrice();
+
+        window.location.href = url;
+    }
+
+    function setTotalPrice(){
+        var totalPrice = 0;
+        try {
+            var list = document.getElementsByClassName("price-paragraph");
+            for (var item of list) {
+                totalPrice += parseInt(log(item.innerHTML));
+            }
+            document.getElementById("total-price").innerHTML = totalPrice + " kr.";
+        } catch (e) {
+            alert("for/of with document.getElementsByClassName (HTMLCollection) does not work - throws exception")
+        }
+    }
+
+    function log(args) {
+        var str = "";
+        for (var i = 0; i < arguments.length; i++) {
+            if (typeof arguments[i] === "object") {
+                str += JSON.stringify(arguments[i]);
+            } else {
+                str += arguments[i];
+            }
+        }
+        return str;
+    }
+
+
+</script>
 {% endblock %}
