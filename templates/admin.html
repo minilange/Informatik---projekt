@@ -11,7 +11,6 @@
             <th scope="col">Produkter</th>
             <th>Ordretotal</th>
             <th>Status</th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -22,27 +21,16 @@
             <td>{{ order["user_info"][2][:-7] }}</td>
             <td class="p-3">
                 {% for product in order["products"] %}
-                <ul>
-                    <span>
-                        <img style="width: 100px;" src="{{product[3]}}.png" alt="{{product[0]}} image">
-                        <p>{{product[0]}}, {{product[1]}} kr.</p>
-                    </span>
+                <ul class="w-auto">
+                        <img style="width: 50px;" class="d-inline" src="{{product[3]}}.png" alt="{{product[0]}} image">
+                        <p class="d-inline">{{product[0]}}, {{product[1]}} kr.</p>
                 </ul>
                 {% endfor %}
             </td>
             <td><b>{{ order["total_price"] }} kr.</b></td>
             <td>
-                {% if order["status"] == "0" %}
-                <p>Ikke betalt</p>
-                {% else %}
-                <p>Betalt</p>
-                {% endif %}
-                </td> 
-            <td>
-                <form action="/removeOrder" method="post">
-                    <input type="hidden" name="order_id" value="{{order["id"]}}">
-                    <button class="btn btn-danger" type="submit">Fjern</button>
-                </form>
+                Færdig
+            </td>
         </tr>
         {% endfor %}
     </tbody>
