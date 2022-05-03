@@ -11,7 +11,7 @@
     <title>Webshop</title>
 </head>
 
-<body class="container">
+<body class="container h-100 w-100">
     <header
         class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between top-0 py-3 mb-4 border-bottom position-sticky">
         <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
@@ -36,11 +36,11 @@
             <form action="/cart">
                 <button type="submit" class="btn btn-outline-primary" id="basket-btn" >Kurv 🛒
                     <span class="badge" id="basket-badge">
-                        {% if session["cart"] %}
-                        {{session["cart"]|length}}
-                        {% else %}
-                        0
-                        {% endif %}
+                        {% set item_count = [0] -%}
+                        {% for item in session["cart"] -%}
+                            {% if item_count.append(item_count.pop() + session["cart"][item][0]) -%}{% endif %}
+                        {% endfor %}
+                        {{ item_count[0] }}
                     </span>
                 </button>
                 <span class="hide basket-popup">
@@ -71,6 +71,7 @@
     </button>
 
     <div class="container d-flex flex-column min-vh-10">
+    <!-- <div class="navbar p-5 fixed-bottom"> -->
         <footer class="py-3 my-4 mt-auto">
             <hr />
             <p class="text-center text-muted">© 2022 TECHLOGIC A/S</p>
