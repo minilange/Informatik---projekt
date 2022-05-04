@@ -1,6 +1,4 @@
-from math import prod
 import sqlite3 as SQL
-from string import punctuation
 from flask import Flask, redirect, render_template, request, session
 from datetime import datetime
 from flask_session.__init__ import Session
@@ -10,6 +8,19 @@ from werkzeug.security import check_password_hash, generate_password_hash
 app = Flask(__name__)
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+
+def getStatus(date):
+    seconds = (datetime.now() - datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")).total_seconds()
+    print(seconds)
+    if seconds > 300:
+        return "Modtaget og færdig"
+    elif seconds > 150:
+        return "Afsendt"
+    else:
+        return "Bekræftet"
+    
+app.jinja_env.filters["getStatus"] = getStatus
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
@@ -66,13 +77,13 @@ def login():
         
         dbUser = dbUser[0]
         
-        if not check_password_hash(dbUser[3], password):
+        if not check_password_hash(dbUser[7], password):
             return render_template("login.html", error="Incorrect username and/or password")
 
         session["user"] = username
         session["user_id"] = dbUser[0]
         
-        if dbUser[4] == 1:
+        if dbUser[8] == 1:
             session["admin"] = True
         
         return redirect("/")
@@ -89,14 +100,18 @@ def register():
 
     if request.method == "POST":
         username = request.form.get("username")
+        email = request.form.get("email")
+        firstname = request.form.get("firstname")
+        lastname = request.form.get("lastname")
+        address = request.form.get("address")
+        city = request.form.get("city")
         password = request.form.get("password")
         confirm = request.form.get("confirmation")
-        email = request.form.get("email")
 
-        if username == "" or password == "" or confirm == "" or email == "":
+        if username == "" or email == "" or firstname == "" or lastname == "" or address == ""  or password == "" or confirm == "" or city == "":
             return render_template("register.html", error="Udfyld venligst alle felter")
 
-        if email.count("@") != 1 and email.count(".") == 0:
+        if email.count("@") != 1 or email.count(".") == 0:
             return render_template("register.html", error="Indtast venligst en gyldig email")
 
         if password != confirm:
@@ -122,7 +137,7 @@ def register():
         if len(dbUser) != 0:
             return render_template("register.html", error="Brugernavn er allerede taget")
         
-        db.execute("INSERT INTO users (username, password, email, admin) VALUES (?, ?, ?, 0)", (username, generate_password_hash(password), email))
+        db.execute("INSERT INTO users (username, firstname, lastname, address, city, password, email, admin) VALUES (?, ?, ?, ?, ?, ?, ?, 0)", (username, firstname, lastname, address, city, generate_password_hash(password), email))
         conn.commit()
 
         return redirect("/login")
@@ -147,10 +162,13 @@ def admin():
 
     for user in users:
         tmp_orders = {}
+        tmp_orders["total_price"] = 0
         tmp_orders["user_info"] = user
         tmp_orders["products"] = readDB(f"SELECT p.name, p.price, p.category, p.image, orderlines.quantity FROM orderlines INNER JOIN products AS p ON orderlines.product_id = p.id WHERE order_id = {user[3]}")
 
-        tmp_orders["total_price"] = readDB(f"SELECT SUM(price) FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {user[3]}")[0][0]
+        for product in tmp_orders["products"]:
+            tmp_orders["total_price"] += product[1] * product[4]
+        # tmp_orders["total_price"] = readDB(f"SELECT SUM(price) FROM orderlines INNER JOIN products ON orderlines.product_id = products.id WHERE order_id = {user[3]}")[0][0]
         orders.append(tmp_orders)
 
     return render_template("admin.html", orders=orders)
@@ -210,15 +228,31 @@ def cart():
         return redirect("/")
     else:
         products = []
+        user = readDB(f"SELECT * FROM users WHERE id = {session['user_id']}")[0]
         totalPrice = 0
         if session.get("cart"):
             for key in session["cart"]:
                 product = readDB(f"SELECT * FROM products WHERE id = {key}")[0]
                 product.append(session["cart"][key][0])
                 products.append(product)
-                totalPrice += product[2]
+                totalPrice += product[2] * session["cart"][key][0]
 
-        return render_template("cart.html", products=products, totalPrice=totalPrice)
+        return render_template("cart.html", products=products, totalPrice=totalPrice, user=user)
+
+
+@app.route("/updateQuantity", methods=["GET", "POST"])
+def updateQuantity():
+    product_id = request.args.get("id")
+    quantity = request.args.get("quantity")
+    print(f"before: {session['cart'][product_id]}")
+    try:
+        session["cart"][product_id][0] = int(quantity)
+    except:
+        print("error")
+
+    print(f"after: {session['cart'][product_id]}")
+    return redirect("/cart")
+
 
 def readDB(query):    
     data = db.execute(query).fetchall()
