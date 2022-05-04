@@ -254,6 +254,20 @@ def updateQuantity():
     return redirect("/cart")
 
 
+
+@app.route("/updateQuantity", methods=["GET", "POST"])
+def updateQuantity():
+    product_id = request.args.get("id")
+    quantity = request.args.get("quantity")
+    print(f"before: {session['cart'][product_id]}")
+    try:
+        session["cart"][product_id][0] = int(quantity)
+    except:
+        print("error")
+
+    print(f"after: {session['cart'][product_id]}")
+    return redirect("/cart")
+
 def readDB(query):    
     data = db.execute(query).fetchall()
     

@@ -36,11 +36,15 @@
             <form action="/cart">
                 <button type="submit" class="btn btn-outline-primary" id="basket-btn" >Kurv 🛒
                     <span class="badge" id="basket-badge">
-                        {% set item_count = [0] -%}
-                        {% for item in session["cart"] -%}
+                        {% if session["cart"] -%}
+                            {% set item_count = [0] -%}
+                            {% for item in session["cart"] -%}
                             {% if item_count.append(item_count.pop() + session["cart"][item][0]) -%}{% endif %}
-                        {% endfor %}
-                        {{ item_count[0] }}
+                            {% endfor %}
+                            {{ item_count[0] }}
+                        {% else %}
+                        0
+                        {% endif %}
                     </span>
                 </button>
                 <span class="hide basket-popup">
