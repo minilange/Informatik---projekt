@@ -23,7 +23,16 @@
             <li><a href="/about" class="nav-link px-2 link-dark">Om</a></li>
             <li><a href="/contact" class="nav-link px-2 link-dark">Kontakt</a></li>
             {% if session["admin"] %}
-            <li><a href="/admin" id="admin-nav" class="nav-link px-2 link-dark"><b>Admin</b></a></li>
+            <div class="w-full">
+                <li id="basket-btn"><a href="/admin" id="admin-nav" class="nav-link px-2 link-dark" ><b>Admin</b></a></li>
+                <span class="hide admin-popup">
+                    <div class="list-group list-group-flush">
+                        <li class="list-group-item"><a href="/admin" class="nav-link link-secondary">Ordre</a></li>
+                        <li class="list-group-item"><a href="/users" class="nav-link link-secondary">Bruger Søgning</a></li>
+                        <li class="list-group-item"><a href="/storage" class="nav-link link-secondary">Lager Status</a></li>
+                    </div>  
+                </span>
+            </div>
             {% endif %}
         </ul>
         <div class="col-md-3 text-end d-flex justify-content-end">
