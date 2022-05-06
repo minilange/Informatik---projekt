@@ -61,7 +61,12 @@ def about():
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
+    if session["cart"] is not None:
+        tmpCart = session["cart"]
+
     session.clear()
+
+    session["cart"] = tmpCart
 
     if request.method == "POST":
         username = request.form.get("username")
@@ -209,9 +214,10 @@ def removeFromCart():
 @app.route("/cart", methods=["GET", "POST"])
 def cart():
     
+    if not session.get("user_id"):
+        return redirect("/login")
+
     if request.method == "POST":
-        if not session.get("user_id"):
-            return redirect("/login")
         
         db.execute(f"INSERT INTO orders (user_id, timestamp) VALUES ({session['user_id']}, '{datetime.now()}')")
         conn.commit()
@@ -227,6 +233,7 @@ def cart():
         session["cart"] = {}
         return redirect("/")
     else:
+
         products = []
         user = readDB(f"SELECT * FROM users WHERE id = {session['user_id']}")[0]
         totalPrice = 0

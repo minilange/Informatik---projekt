@@ -47,20 +47,20 @@
 {% if totalPrice > 0 %}
     <div class="container">
         <div class="row">
-            <form>
-                <div class="row col-6">
-                    <h4>Person Information</h4>
+            <form class="form">
+                <h4>Personlig information</h4><br>
+                <div class="d-flex flex-column justify-content-between w-100">
                     <label for="firstname" autofocus><i class="fa fa-user"></i>Fulde navn</label>
-                    <input type="text" id="firstname" name="firstname" value="{{ user[3] }} {{ user[4] }}" placeholder="Fulde navn">
-                
-                    <label for="email"><i class="fa fa-envelope"></i>Email</label>
-                    <input type="text" id="email" value="{{ user[2] }}" name="email" placeholder="Email">
+                    <input class="form-control p-1 m-2 mb-4" type="text" id="firstname" name="firstname" value="{{ user[3] }} {{ user[4] }}" placeholder="Fulde navn">
 
-                    <label for="adress"><i class="fa fa-home"></i>Adresse</label><br>
-                    <input type="text" id="adress" value="{{ user[6] }}" name="adress" placeholder="Adresse">
+                    <label for="email"><i class="fa fa-envelope"></i>Email</label>
+                    <input class="form-control p-1 m-2 mb-4" type="text" id="email" value="{{ user[2] }}" name="email" placeholder="Email">
+
+                    <label for="adress"><i class="fa fa-home"></i>Adresse</label>
+                    <input class="form-control p-1 m-2 mb-4" type="text" id="adress" value="{{ user[6] }}" name="adress" placeholder="Adresse">
 
                     <label for="city"><i class="fa fa-institution"></i>By</label>
-                    <input type="text" id="city" name="city" value="{{ user[5] }}" placeholder="Aalborg">
+                    <input class="form-control p-1 m-2 mb-4"  type="text" id="city" name="city" value="{{ user[5] }}" placeholder="Aalborg">
                 </div>
 
                 <!-- <div class="row col-5">
