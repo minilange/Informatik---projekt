@@ -220,10 +220,10 @@ def addToCart():
 @app.route("/removeFromCart", methods=["GET", "POST"])
 def removeFromCart():
     product_id = request.args.get("id")
-    
+    print(f"ID: {product_id}")
     session["cart"].pop(product_id, None)
     print(f"cart: {session['cart']}")
-    return redirect("/")
+    return redirect("/cart")
 
 
 @app.route("/cart", methods=["GET", "POST"])
