@@ -43,11 +43,13 @@
                 {% endif %}
                 <p class="text-end mt-auto">{{prod[2]}} kr.</p>
                 </b>
+                {% if prod[6] > 0 %}
                 <form action="/addToCart" method="post">
                     <input class="form-control mx-auto w-auto" id="product_id" name="product_id" type="hidden" value="{{prod[0]}}">
                     <input class="form-control mx-auto w-auto" id="product_name" name="product_name" type="hidden" value="{{prod[1]}}">
                     <button class="btn btn-success mt-2" type="submit">Læg i kurv 🛒</button>
                 </form>
+                {% endif %}
             </div>
         </div>
     </div>

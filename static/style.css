@@ -176,6 +176,47 @@ header {
     display: block;
 }
 
+
+.admin-popup {
+    background: #F8F8F8;
+    border: 1px solid #cecece;
+    border-radius: 6px;
+    color: #717171;
+    font-size: 13px;
+    letter-spacing: 1px;
+    line-height: 30px;
+    position: absolute;
+    text-align: center;
+    text-transform: uppercase;
+    top: 78%;
+    right: 39%;
+    display: none;
+    padding: 0;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+    animation: growDown 300ms ease-in-out forwards;
+    transform-origin: top center;
+}
+
+.admin-popup::before {
+    content:'';
+    position:absolute;
+    top: -5px;
+    width: 6px;
+    height: 6px;
+    border-bottom:2px solid #cecece;
+    border-right:2px solid #cecece;
+    background:#f8f8f8;
+    right: 20%;
+    margin-left:-10px;
+    -moz-transform:rotate(225deg);
+    -webkit-transform:rotate(225deg);
+    transform:rotate(225deg);
+}
+
+.admin-popup:hover {
+    display: block;
+}
+
 /* Scroll to top button */
 #btn-back-to-top {
     background-color: #a2a2a2;

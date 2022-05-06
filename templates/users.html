@@ -1,0 +1,44 @@
+{% extends 'layout.html' %}
+
+{% block main %}
+<h1>Brugere</h1>
+<table class="table table-hover table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th scope="col">Brugernavn</th>
+            <th scope="col">Navn</th>
+            <th scope="col">Email</th>
+            <th>Adresse</th>
+            <th>Admin</th>
+        </tr>
+    </thead>
+    <!-- 
+        id
+        username
+        email
+        firstname
+        lastname
+        city
+        address
+        password
+        admin
+     -->
+    <tbody>
+        {% for user in users %}
+        <tr class="align-middle">
+            <td>{{ user[0] }}</td>
+            <td>{{ user[1] }}</td>
+            <td>{{ user[3] }} {{user[4]}}</td>
+            <td>{{ user[2] }}</td>
+            <td>{{ user[5] }}, {{ user[6] }}</td>
+            {% if user[8] == 1 %}
+            <td>True</td>
+            {% else %}
+            <td>False</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

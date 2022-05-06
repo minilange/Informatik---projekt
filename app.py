@@ -178,6 +178,20 @@ def admin():
 
     return render_template("admin.html", orders=orders)
 
+@app.route("/users")
+def users():
+    
+    users = readDB("SELECT * FROM users")
+
+    return render_template("users.html", users=users)
+
+@app.route("/storage")
+def storage():
+    
+    products = readDB("SELECT p.id, p.name, p.price, p.description, c.name, p.image, p.quantity FROM products as p INNER JOIN categories as c ON p.category = c.id")
+
+    return render_template("stock.html", products=products)
+
 @app.route("/addToCart", methods=["GET", "POST"])
 def addToCart():
     product_id = request.form.get("product_id")
@@ -240,6 +254,7 @@ def cart():
         if session.get("cart"):
             for key in session["cart"]:
                 product = readDB(f"SELECT * FROM products WHERE id = {key}")[0]
+                db.execute(f"UPDATE products SET quantity = quantity - {session['cart'][key][0]} WHERE id = {key}")
                 product.append(session["cart"][key][0])
                 products.append(product)
                 totalPrice += product[2] * session["cart"][key][0]
