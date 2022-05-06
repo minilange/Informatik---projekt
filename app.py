@@ -61,9 +61,10 @@ def about():
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
-    if session["cart"] is not None:
+    if session and session["cart"] is not None:
         tmpCart = session["cart"]
-
+    else:
+        tmpCart = []
     session.clear()
 
     session["cart"] = tmpCart
