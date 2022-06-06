@@ -9,7 +9,6 @@ app = Flask(__name__)
 
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-
 def getStatus(date):
     seconds = (datetime.now() - datetime.strptime(date, "%Y-%m-%d %H:%M:%S.%f")).total_seconds()
     print(seconds)
@@ -26,9 +25,8 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)    
 
-conn = SQL.connect("shop.db", check_same_thread=False)
-db = conn.cursor()
-
+conn = SQL.connect("shop.DB", check_same_thread=False)
+DB = conn.cursor()
 
 @app.after_request
 def after_request(response):
@@ -143,7 +141,7 @@ def register():
         if len(dbUser) != 0:
             return render_template("register.html", error="Brugernavn er allerede taget")
         
-        db.execute("INSERT INTO users (username, firstname, lastname, address, city, password, email, admin) VALUES (?, ?, ?, ?, ?, ?, ?, 0)", (username, firstname, lastname, address, city, generate_password_hash(password), email))
+        DB.execute("INSERT INTO users (username, firstname, lastname, address, city, password, email, admin) VALUES (?, ?, ?, ?, ?, ?, ?, 0)", (username, firstname, lastname, address, city, generate_password_hash(password), email))
         conn.commit()
 
         return redirect("/login")
@@ -225,7 +223,6 @@ def removeFromCart():
     print(f"cart: {session['cart']}")
     return redirect("/cart")
 
-
 @app.route("/cart", methods=["GET", "POST"])
 def cart():
     
@@ -234,7 +231,7 @@ def cart():
 
     if request.method == "POST":
         
-        db.execute(f"INSERT INTO orders (user_id, timestamp) VALUES ({session['user_id']}, '{datetime.now()}')")
+        DB.execute(f"INSERT INTO orders (user_id, timestamp) VALUES ({session['user_id']}, '{datetime.now()}')")
         conn.commit()
 
         order_id = readDB(f"SELECT order_id FROM orders WHERE user_id = {session['user_id']} ORDER BY timestamp DESC LIMIT 1")[0][0]
@@ -242,7 +239,7 @@ def cart():
         for product_id in session["cart"]:
             print(session["cart"][product_id])
             
-            db.execute(f"INSERT INTO orderlines (order_id, product_id, quantity) VALUES ({order_id}, {product_id}, {session['cart'][product_id][0]})")
+            DB.execute(f"INSERT INTO orderlines (order_id, product_id, quantity) VALUES ({order_id}, {product_id}, {session['cart'][product_id][0]})")
             conn.commit()
 
         session["cart"] = {}
@@ -255,7 +252,7 @@ def cart():
         if session.get("cart"):
             for key in session["cart"]:
                 product = readDB(f"SELECT * FROM products WHERE id = {key}")[0]
-                db.execute(f"UPDATE products SET quantity = quantity - {session['cart'][key][0]} WHERE id = {key}")
+                DB.execute(f"UPDATE products SET quantity = quantity - {session['cart'][key][0]} WHERE id = {key}")
                 product.append(session["cart"][key][0])
                 products.append(product)
                 totalPrice += product[2] * session["cart"][key][0]
@@ -276,7 +273,7 @@ def updateQuantity():
     return redirect("/cart")
 
 def readDB(query):    
-    data = db.execute(query).fetchall()
+    data = DB.execute(query).fetchall()
     
     newData = []
     for row in data:
